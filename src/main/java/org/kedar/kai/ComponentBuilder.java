@@ -28,10 +28,11 @@ class ComponentBuilder {
                 if (o1.size() > o2.size())
                     return 1;
                 //return 0; //bug!
-                return o1.identifier().compareTo(o2.identifier());
+                return o1.compareTo(o2);
             }
         };
-        components = new HashSet<>();
+//        components = new HashSet<>();
+        components = new TreeSet<>(sizeComparator);
     }
 
     String process(BufferedReader reader) throws IOException {
@@ -40,7 +41,7 @@ class ComponentBuilder {
         vertices = new User[Integer.valueOf(line) + 1]; // to use more straightforward indexing where index = user's id
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#"))
-                continue;
+                break;
             StringTokenizer t = new StringTokenizer(line, " ,");
             if (!t.hasMoreTokens())
                 continue;
@@ -120,6 +121,7 @@ class ComponentBuilder {
         // first, capture those components in a list
         List<Component> cList = new ArrayList<>();
         for (Component c : components) {
+//            System.out.println("iterated component: " + c);
             if (c.size() > limit)
                 break;
             cList.add(c); //this list is sorted on the size of components

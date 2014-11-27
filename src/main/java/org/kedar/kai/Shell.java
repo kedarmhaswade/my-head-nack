@@ -55,7 +55,7 @@ public class Shell {
         ComponentBuilder builder = new ComponentBuilder();
         while ((cmd = reader.readLine()) != null) {
             cmd = cmd.toLowerCase().trim();
-            if (QUIT.equals(cmd)) {
+            if (QUIT.equals(cmd) || "q".equals(cmd)) {
                 System.exit(0);
             } else if (SETUP.equals(cmd)) {
                 builder = new ComponentBuilder();
@@ -116,7 +116,13 @@ public class Shell {
                     writer.println("invalid command, it should be: " + LIMIT_APPROX + " <number>, or enter help");
                 }
             } else if (cmd.startsWith(LIMIT_EXACT)) {
-
+                try {
+                    Scanner sc = new Scanner(cmd).useDelimiter(LIMIT_EXACT + "\\s+");
+                    int limit = sc.nextInt();
+                    writer.println("Requires finding all subsets of a give set -- exponential algorithm -- not yet implemented ...");
+                } catch (NoSuchElementException | IllegalStateException ex) {
+                    writer.println("invalid command, it should be: " + LIMIT_EXACT + " <number>, or enter help");
+                }
             } else {
                 writer.println("I did not get that, here's some help for you to help me :-)");
                 printHelp(writer);

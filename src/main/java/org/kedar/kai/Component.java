@@ -73,6 +73,11 @@ class Component implements Iterable<User>, Comparable<Component> {
         return "Identifier user id: " + this.identifier.id + ", number of connected users: " + this.size() + ": " + this.members;
     }
 
+    /**
+     * Implements the natural ordering of components.
+     * @param that Component whose relative order is to be determined
+     * @return -1, 0 or 1
+     */
     @Override
     public int compareTo(Component that) {
         int idc = this.identifier.compareTo(that.identifier); //id comparison
