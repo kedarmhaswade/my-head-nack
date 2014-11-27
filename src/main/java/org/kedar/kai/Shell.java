@@ -54,6 +54,7 @@ public class Shell {
         String cmd;
         ComponentBuilder builder = new ComponentBuilder();
         while ((cmd = reader.readLine()) != null) {
+            cmd = cmd.toLowerCase().trim();
             if (QUIT.equals(cmd)) {
                 System.exit(0);
             } else if (SETUP.equals(cmd)) {
@@ -70,7 +71,7 @@ public class Shell {
                     Scanner sc = new Scanner(cmd).useDelimiter(VERSION + "\\s+");
                     writer.println(builder.getUserVersion(sc.nextInt()));
                 } catch (NoSuchElementException | IllegalStateException ex) {
-                    writer.println("invalid command, it should be: version: <number>, or enter help");
+                    writer.println("invalid command, it should be: version <number>, or enter help");
                 } catch (NoSuchUserException e) {
                     writer.println(e.getMessage());
                 }
@@ -84,7 +85,7 @@ public class Shell {
                     int infected = builder.predict(uid);
                     writer.println("If you infect user: " + uid + ", " + infected + " users will get infected in all");
                 } catch (NoSuchElementException | IllegalStateException ex) {
-                    writer.println("invalid command, it should be: version: <number>, or enter help");
+                    writer.println("invalid command, it should be: " + PREDICT + " <number>, or enter help");
                 } catch (NoSuchUserException e) {
                     writer.println(e.getMessage());
                 }
@@ -96,11 +97,11 @@ public class Shell {
                     writer.println("As a result of infecting user: " + uid + ", " + builder.getComponent(uid).size() + " users are infected");
                     writer.println("These users' new version is: " + builder.getComponent(uid).getVersion());
                 } catch (NoSuchElementException | IllegalStateException ex) {
-                    writer.println("invalid command, it should be: version: <number>, or enter help");
+                    writer.println("invalid command, it should be: " + INFECT + " <number>, or enter help");
                 } catch (NoSuchUserException e) {
                     writer.println(e.getMessage());
                 }
-            } else if(cmd.startsWith(LIMIT_APPROX)) {
+            } else if (cmd.startsWith(LIMIT_APPROX)) {
                 try {
                     Scanner sc = new Scanner(cmd).useDelimiter(LIMIT_APPROX + "\\s+");
                     int limit = sc.nextInt();
@@ -112,9 +113,9 @@ public class Shell {
                         report(infected, writer);
                     }
                 } catch (NoSuchElementException | IllegalStateException ex) {
-                    writer.println("invalid command, it should be: version: <number>, or enter help");
+                    writer.println("invalid command, it should be: " + LIMIT_APPROX + " <number>, or enter help");
                 }
-            } else if(cmd.startsWith(LIMIT_EXACT)) {
+            } else if (cmd.startsWith(LIMIT_EXACT)) {
 
             } else {
                 writer.println("I did not get that, here's some help for you to help me :-)");

@@ -14,14 +14,16 @@ import java.util.Iterator;
  *
  * @author kedar
  */
-class Component implements Iterable<User> {
+class Component implements Iterable<User>, Comparable<Component> {
     private User identifier;
     private HashSet<User> members;
+
     Component(User identifier) {
         this.identifier = identifier;
         this.members = new HashSet<>();
         this.addMember(identifier);
     }
+
     int size() {
         return this.members.size();
     }
@@ -29,8 +31,10 @@ class Component implements Iterable<User> {
     User identifier() {
         return this.identifier;
     }
+
     /**
      * The classic union operation -- the only mutating method this class exposes.
+     *
      * @param other the other component whose members are to be merged into this one.
      */
     void merge(Component other) {
@@ -54,9 +58,11 @@ class Component implements Iterable<User> {
         for (User u : this)
             u.infect(v);
     }
+
     int getVersion() {
         return this.identifier.version();
     }
+
     @Override
     public Iterator<User> iterator() {
         return members.iterator();
@@ -65,6 +71,24 @@ class Component implements Iterable<User> {
     @Override
     public String toString() {
         return "Identifier user id: " + this.identifier.id + ", number of connected users: " + this.size() + ": " + this.members;
+    }
+
+    @Override
+    public int compareTo(Component that) {
+        int idc = this.identifier.compareTo(that.identifier); //id comparison
+        int sc; //member size comparison
+        if (this.members.equals(that.members))
+            sc = 0;
+        else {
+            if (this.members.size() < that.members.size())
+                sc = -1;
+            else
+                sc = 1;
+        }
+        if (idc == 0) //two components have the 'same' identifier
+            return sc;
+        else
+            return idc;
     }
 
     //Private ...
