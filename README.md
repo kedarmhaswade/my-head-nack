@@ -29,6 +29,7 @@ The file __graph.conf__ contains a textual representation of the graph to analyz
 # 3 4,5
 # 4 6,7,8,9
 # 9 10
+````
 
 If you want to create a graph (subgraph, please :-P) of KA users, you can drop it into this file and run the 'setup' command
 inside the shell. If that runs well, perhaps this project can be used as a testbed to analyze infections and limit them.
