@@ -70,7 +70,7 @@ class Component implements Iterable<User>, Comparable<Component> {
 
     @Override
     public String toString() {
-        return "Identifier user id: " + this.identifier.id + ", number of connected users: " + this.size() + ": " + this.members;
+        return "Id user: " + this.identifier.id + ", #users: " + this.size() + ": " + this.members;
     }
 
     /**

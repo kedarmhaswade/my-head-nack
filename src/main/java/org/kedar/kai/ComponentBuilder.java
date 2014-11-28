@@ -16,23 +16,22 @@ import java.util.*;
  */
 class ComponentBuilder {
 
+    static final Comparator<Component> SIZE_COMPARATOR = new Comparator<Component>() {
+        @Override
+        public int compare(Component o1, Component o2) {
+            if (o1.size() < o2.size())
+                return -1;
+            if (o1.size() > o2.size())
+                return 1;
+            //return 0; //bug!
+            return o1.compareTo(o2);
+        }
+    };
     private final Set<Component> components;
     private User[] vertices;
 
     ComponentBuilder() {
-        Comparator<Component> sizeComparator = new Comparator<Component>() {
-            @Override
-            public int compare(Component o1, Component o2) {
-                if (o1.size() < o2.size())
-                    return -1;
-                if (o1.size() > o2.size())
-                    return 1;
-                //return 0; //bug!
-                return o1.compareTo(o2);
-            }
-        };
-//        components = new HashSet<>();
-        components = new TreeSet<>(sizeComparator);
+        components = new HashSet<>();
     }
 
     String process(BufferedReader reader) throws IOException {
@@ -113,20 +112,13 @@ class ComponentBuilder {
             This is similar to the knapsack problem where the objective is to fill the knapsack with as many
             whole items as possible are picked and the items do not repeat => An item can be either picked or not.
             The difference is that the optimization here is that of 'size'/'weight' alone and no item value is involved.
-            The algorithm is not guaranteed to return an optimal answer, but that interpretation is pardonable per problem statement.
             Algorithm: Dasgupta-Papadimitriou-Vazirani: pp. 182. The following algorithm is a slight variation of the same.
          */
         // we are unconcerned about all the components that are bigger than the limit, we intend to find that
         // selection of components, whose sizes together are approximately as big as limit
-        // first, capture those components in a list
-        List<Component> cList = new ArrayList<>();
-        for (Component c : components) {
-//            System.out.println("iterated component: " + c);
-            if (c.size() > limit)
-                break;
-            cList.add(c); //this list is sorted on the size of components
-        }
-//        System.out.println(cList);
+        // first, capture those components in a list sorted on component sizes
+        List<Component> cList = sortComponents(SIZE_COMPARATOR);
+        System.out.println(cList);
         int[][] max = new int[limit + 1][cList.size() + 1];
         //max[i][j] denotes the maximum size possible for a limit of i and with groups 1,2,...,j being available
         //goal is the find max[limit][cList.size()] and traverse the limit row backward to get the groups picked
@@ -196,6 +188,15 @@ class ComponentBuilder {
         }
 //        System.out.println("processed line for uid: " + uid + ", sids: " + Arrays.toString(sids));
 //        System.out.println(this.componentsToString());
+    }
+
+    private List<Component> sortComponents(Comparator<Component> cmp) {
+        List<Component> list = new ArrayList<>(components.size());
+        for (Component c : components) {
+            list.add(c);
+        }
+        Collections.sort(list, cmp); // now list is sorted according to the given comparator
+        return list;
     }
 
     private void print2da(int[][] a) {
