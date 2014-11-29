@@ -190,6 +190,16 @@ class ComponentBuilder {
 //        System.out.println(this.componentsToString());
     }
 
+    // Methods to facilitate Unit Testing
+    int getNumberOfVertices() {
+        return vertices.length - 1;
+    }
+    int getNumberOfComponents() {
+        return components.size();
+    }
+
+    // Methods to facilitate Unit Testing
+
     private List<Component> sortComponents(Comparator<Component> cmp) {
         List<Component> list = new ArrayList<>(components.size());
         for (Component c : components) {
